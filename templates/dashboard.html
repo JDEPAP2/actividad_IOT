@@ -1,0 +1,58 @@
+{% extends 'index.html' %}
+{% block content %}
+<section class="status">
+  <div class="card">
+    <h2>Estado actual</h2>
+    <p class="badge {{ 'bad' if status=='ALERTA (riesgo)' else 'ok' }}">
+      {{ status or 'Sin datos' }}
+    </p>
+
+    {% if latest %}
+    <ul class="latest-values">
+      <li><strong>Tiempo:</strong> {{ latest.time }}</li>
+      <li><strong>Source:</strong> {{ latest.get('source', '—') }}</li>
+      <li><strong>Temp:</strong> {{ '%.2f'|format(latest.get('temperature_c', 0)) }} °C</li>
+      <li><strong>Humedad:</strong> {{ '%.2f'|format(latest.get('humidity_pct', 0)) }} %</li>
+      <li><strong>Acc X:</strong> {{ '%.3f'|format(latest.get('accel_x_g', 0)) }} g</li>
+      <li><strong>Acc Y:</strong> {{ '%.3f'|format(latest.get('accel_y_g', 0)) }} g</li>
+      <li><strong>Acc Z:</strong> {{ '%.3f'|format(latest.get('accel_z_g', 0)) }} g</li>
+      <li><strong>Predicción:</strong> {{ '%.2f'|format(latest.get('prediction', 0)) }}</li>
+    </ul>
+    {% endif %}
+  </div>
+</section>
+
+<section class="table-section">
+<h2>Últimos datos</h2>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Tiempo</th>
+<th>Source</th>
+<th>Temp (°C)</th>
+<th>Humedad (%)</th>
+<th>Acc X (g)</th>
+<th>Acc Y (g)</th>
+<th>Acc Z (g)</th>
+<th>Predicción</th>
+</tr>
+</thead>
+<tbody>
+ {% for row in data %}
+<tr>
+<td>{{ row.time }}</td>
+<td>{{ row.get('source', '—') }}</td>
+<td>{{ '%.2f'|format(row.get('temperature_c', 0)) }}</td>
+<td>{{ '%.2f'|format(row.get('humidity_pct', 0)) }}</td>
+<td>{{ '%.3f'|format(row.get('accel_x_g', 0)) }}</td>
+<td>{{ '%.3f'|format(row.get('accel_y_g', 0)) }}</td>
+<td>{{ '%.3f'|format(row.get('accel_z_g', 0)) }}</td>
+<td>{{ '%.2f'|format(row.get('prediction', 0)) }}</td>
+</tr>
+ {% endfor %}
+</tbody>
+</table>
+</div>
+</section>
+{% endblock %}
